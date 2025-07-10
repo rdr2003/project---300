@@ -8,34 +8,43 @@ from .models import Followers, LikePost, Post, Profile
 from django.db.models import Q
 
 def signup(request):
-    try:
-        if request.method == 'POST':
-            fnm = request.POST.get('fnm')
-            emailid = request.POST.get('emailid')
-            pwd = request.POST.get('pwd')
-            cpwd = request.POST.get('cpwd')
+    if request.method == 'POST':
+        fnm = request.POST.get('fnm')
+        emailid = request.POST.get('emailid')
+        pwd = request.POST.get('pwd')
+        cpwd = request.POST.get('cpwd')
 
-            # Check if passwords match
-            if pwd != cpwd:
-                invalid = "Passwords do not match"
-                return render(request, 'signup.html', {'invalid': invalid})
+        # Check if passwords match
+        if pwd != cpwd:
+            invalid = "Passwords do not match"
+            return render(request, 'signup.html', {'invalid': invalid})
 
-            # Try creating the user
-            my_user = User.objects.create_user(fnm, emailid, pwd)
+        # Check if user or email already exists
+        if User.objects.filter(username=fnm).exists():
+            invalid = "Username already taken"
+            return render(request, 'signup.html', {'invalid': invalid})
+        if User.objects.filter(email=emailid).exists():
+            invalid = "Email already registered"
+            return render(request, 'signup.html', {'invalid': invalid})
+
+        # Try creating the user
+        try:
+            my_user = User.objects.create_user(username=fnm, email=emailid, password=pwd)
             my_user.save()
 
             # Create corresponding profile
-            user_model = User.objects.get(username=fnm)
-            new_profile = Profile.objects.create(user=user_model, id_user=user_model.id)
+            new_profile = Profile.objects.create(user=my_user, id_user=my_user.id)
             new_profile.save()
 
             login(request, my_user)
             return redirect('/')
-    except:
-        invalid = "User already exists or signup error"
-        return render(request, 'signup.html', {'invalid': invalid})
+        except Exception as e:
+            invalid = f"Signup failed: {str(e)}"
+            return render(request, 'signup.html', {'invalid': invalid})
 
     return render(request, 'signup.html')
+
+
 
 
 def loginn(request):
