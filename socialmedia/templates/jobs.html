@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Latest Job Circulars</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="0.5" fill="rgba(255,255,255,0.1)"/><circle cx="75" cy="75" r="0.3" fill="rgba(255,255,255,0.08)"/><circle cx="50" cy="10" r="0.4" fill="rgba(255,255,255,0.06)"/><circle cx="90" cy="40" r="0.2" fill="rgba(255,255,255,0.04)"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>') repeat;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .main-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .page-header {
+            text-align: center;
+            margin-bottom: 3rem;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .page-header h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 0.5rem;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .page-header p {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 1.2rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .job-stats {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-top: 1rem;
+        }
+
+        .stat-item {
+            text-align: center;
+            color: white;
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            display: block;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        .job-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .job-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(102, 126, 234, 0.1), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .job-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .job-card:hover::before {
+            left: 100%;
+        }
+
+        .job-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            position: relative;
+        }
+
+        .company-logo {
+            width: 60px;
+            height: 60px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-right: 1rem;
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .job-title {
+            flex: 1;
+        }
+
+        .job-title h3 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 0.25rem;
+        }
+
+        .company-name {
+            color: #667eea;
+            font-weight: 500;
+            font-size: 1.1rem;
+        }
+
+        .job-badges {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .badge {
+            padding: 0.4rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        .badge-location {
+            background: linear-gradient(135deg, #FF6B6B, #FF8E8E);
+            color: white;
+        }
+
+        .badge-time {
+            background: linear-gradient(135deg, #4ECDC4, #44A08D);
+            color: white;
+        }
+
+        .job-description {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+            font-size: 1rem;
+        }
+
+        .job-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 1rem;
+            border-top: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .job-meta {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            color: #999;
+            font-size: 0.9rem;
+        }
+
+        .job-meta i {
+            color: #667eea;
+        }
+
+        .apply-btn {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 25px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .apply-btn:hover {
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .empty-state {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 4rem 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .empty-state i {
+            font-size: 4rem;
+            color: #667eea;
+            margin-bottom: 1rem;
+        }
+
+        .empty-state h3 {
+            color: #333;
+            margin-bottom: 1rem;
+        }
+
+        .empty-state p {
+            color: #666;
+            font-size: 1.1rem;
+        }
+
+        .filter-bar {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border-radius: 15px;
+            padding: 1rem;
+            margin-bottom: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .filter-controls {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .filter-input {
+            flex: 1;
+            min-width: 250px;
+            padding: 0.75rem 1rem;
+            border: none;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.9);
+            font-size: 1rem;
+        }
+
+        .filter-input:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
+        }
+
+        .filter-btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.9);
+            color: #667eea;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .filter-btn:hover {
+            background: white;
+            transform: translateY(-2px);
+        }
+
+        .floating-elements {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .floating-circle {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .floating-circle:nth-child(1) {
+            width: 80px;
+            height: 80px;
+            top: 10%;
+            left: 10%;
+            animation-delay: -2s;
+        }
+
+        .floating-circle:nth-child(2) {
+            width: 120px;
+            height: 120px;
+            top: 70%;
+            right: 10%;
+            animation-delay: -4s;
+        }
+
+        .floating-circle:nth-child(3) {
+            width: 60px;
+            height: 60px;
+            top: 50%;
+            left: 80%;
+            animation-delay: -1s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(180deg); }
+        }
+
+        @media (max-width: 768px) {
+            .main-container {
+                padding: 1rem;
+            }
+            
+            .page-header h1 {
+                font-size: 2rem;
+            }
+            
+            .job-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+            
+            .job-footer {
+                flex-direction: column;
+                gap: 1rem;
+                align-items: flex-start;
+            }
+            
+            .filter-controls {
+                flex-direction: column;
+            }
+            
+            .filter-input {
+                min-width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="floating-elements">
+        <div class="floating-circle"></div>
+        <div class="floating-circle"></div>
+        <div class="floating-circle"></div>
+    </div>
+
+    <div class="main-container">
+        <div class="page-header">
+            <h1><i class="fas fa-briefcase"></i> Latest Job Circulars</h1>
+            <p>Discover your next career opportunity</p>
+            <div class="job-stats">
+                <div class="stat-item">
+                    <span class="stat-number">24</span>
+                    <span class="stat-label">Active Jobs</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">15</span>
+                    <span class="stat-label">Companies</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">98%</span>
+                    <span class="stat-label">Success Rate</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="filter-bar">
+            <div class="filter-controls">
+                <input type="text" class="filter-input" placeholder="Search jobs, companies, or locations...">
+                <button class="filter-btn"><i class="fas fa-filter"></i> Filter</button>
+                <button class="filter-btn"><i class="fas fa-sort"></i> Sort</button>
+            </div>
+        </div>
+
+        <!-- Sample Job Cards -->
+        <div class="job-card">
+            <div class="job-header">
+                <div class="company-logo">TG</div>
+                <div class="job-title">
+                    <h3>Senior Software Engineer</h3>
+                    <div class="company-name">TechGlobal Solutions</div>
+                </div>
+            </div>
+            
+            <div class="job-badges">
+                <span class="badge badge-location">
+                    <i class="fas fa-map-marker-alt"></i> Dhaka, Bangladesh
+                </span>
+                <span class="badge badge-time">
+                    <i class="fas fa-clock"></i> 2 days ago
+                </span>
+            </div>
+            
+            <div class="job-description">
+                We are seeking a talented Senior Software Engineer to join our dynamic development team. You will be responsible for designing, developing, and maintaining scalable web applications using modern technologies. The ideal candidate should have strong problem-solving skills and experience with full-stack development.
+            </div>
+            
+            <div class="job-footer">
+                <div class="job-meta">
+                    <span><i class="fas fa-user"></i> Posted by john_doe</span>
+                    <span><i class="fas fa-calendar"></i> Jan 15, 2025</span>
+                </div>
+                <a href="#" class="apply-btn">
+                    <i class="fas fa-paper-plane"></i> Apply Now
+                </a>
+            </div>
+        </div>
+
+        <div class="job-card">
+            <div class="job-header">
+                <div class="company-logo">DM</div>
+                <div class="job-title">
+                    <h3>Digital Marketing Specialist</h3>
+                    <div class="company-name">Digital Media Pro</div>
+                </div>
+            </div>
+            
+            <div class="job-badges">
+                <span class="badge badge-location">
+                    <i class="fas fa-map-marker-alt"></i> Chittagong, Bangladesh
+                </span>
+                <span class="badge badge-time">
+                    <i class="fas fa-clock"></i> 1 week ago
+                </span>
+            </div>
+            
+            <div class="job-description">
+                Join our creative marketing team as a Digital Marketing Specialist. You will develop and execute comprehensive digital marketing campaigns across multiple channels, analyze performance metrics, and optimize strategies to drive business growth. Experience with SEO, social media, and content marketing is preferred.
+            </div>
+            
+            <div class="job-footer">
+                <div class="job-meta">
+                    <span><i class="fas fa-user"></i> Posted by sarah_marketing</span>
+                    <span><i class="fas fa-calendar"></i> Jan 10, 2025</span>
+                </div>
+                <a href="#" class="apply-btn">
+                    <i class="fas fa-paper-plane"></i> Apply Now
+                </a>
+            </div>
+        </div>
+
+        <div class="job-card">
+            <div class="job-header">
+                <div class="company-logo">FI</div>
+                <div class="job-title">
+                    <h3>Financial Analyst</h3>
+                    <div class="company-name">FinanceInnovate Ltd</div>
+                </div>
+            </div>
+            
+            <div class="job-badges">
+                <span class="badge badge-location">
+                    <i class="fas fa-map-marker-alt"></i> Sylhet, Bangladesh
+                </span>
+                <span class="badge badge-time">
+                    <i class="fas fa-clock"></i> 3 days ago
+                </span>
+            </div>
+            
+            <div class="job-description">
+                We are looking for a detail-oriented Financial Analyst to join our finance team. The role involves analyzing financial data, preparing reports, conducting market research, and supporting strategic decision-making processes. Strong analytical skills and proficiency in financial modeling are essential.
+            </div>
+            
+            <div class="job-footer">
+                <div class="job-meta">
+                    <span><i class="fas fa-user"></i> Posted by finance_hr</span>
+                    <span><i class="fas fa-calendar"></i> Jan 14, 2025</span>
+                </div>
+                <a href="#" class="apply-btn">
+                    <i class="fas fa-paper-plane"></i> Apply Now
+                </a>
+            </div>
+        </div>
+
+        <!-- Empty State (uncomment to show when no jobs available) -->
+        <!-- 
+        <div class="empty-state">
+            <i class="fas fa-briefcase"></i>
+            <h3>No job circulars available yet</h3>
+            <p>Be the first to post a job opportunity and connect with talented professionals!</p>
+        </div>
+        -->
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Add search functionality
+        document.querySelector('.filter-input').addEventListener('input', function(e) {
+            const searchTerm = e.target.value.toLowerCase();
+            const jobCards = document.querySelectorAll('.job-card');
+            
+            jobCards.forEach(card => {
+                const title = card.querySelector('.job-title h3').textContent.toLowerCase();
+                const company = card.querySelector('.company-name').textContent.toLowerCase();
+                const location = card.querySelector('.badge-location').textContent.toLowerCase();
+                
+                if (title.includes(searchTerm) || company.includes(searchTerm) || location.includes(searchTerm)) {
+                    card.style.display = 'block';
+                    card.style.animation = 'fadeIn 0.5s ease';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        });
+
+        // Add apply button animations
+        document.querySelectorAll('.apply-btn').forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                const originalText = this.innerHTML;
+                this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Applying...';
+                this.style.pointerEvents = 'none';
+                
+                setTimeout(() => {
+                    this.innerHTML = '<i class="fas fa-check"></i> Applied!';
+                    this.style.background = 'linear-gradient(135deg, #4CAF50, #45a049)';
+                    
+                    setTimeout(() => {
+                        this.innerHTML = originalText;
+                        this.style.background = 'linear-gradient(135deg, #667eea, #764ba2)';
+                        this.style.pointerEvents = 'auto';
+                    }, 2000);
+                }, 1000);
+            });
+        });
+
+        // Add CSS for fade in animation
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes fadeIn {
+                from { opacity: 0; transform: translateY(20px); }
+                to { opacity: 1; transform: translateY(0); }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>
