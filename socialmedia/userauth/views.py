@@ -257,3 +257,13 @@ def post_job(request):
 def view_jobs(request):
     jobs = JobCircular.objects.all().order_by('-posted_at')
     return render(request, 'jobs.html', {'jobs': jobs})
+
+
+@login_required
+def profile_view(request):
+    return render(request, 'profile.html')
+
+
+@login_required
+def settings_view(request):
+    return render(request, 'settings.html')

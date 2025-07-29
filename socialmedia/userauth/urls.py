@@ -20,7 +20,8 @@ urlpatterns = [
     path('follow', views.follow, name='follow'), 
     path('post-job/', views.post_job, name='post_job'),
     path('jobs/', views.view_jobs, name='view_jobs'),
-    
+    path('profile/', views.profile_view, name='profile'),
+    path('settings/', views.settings_view, name='settings'),
     
     
     
