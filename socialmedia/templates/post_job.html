@@ -1,12 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Post a Job Circular</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
     <style>
+        /* YOUR ORIGINAL CSS HERE (unchanged) */
+        /* ... all your CSS as is ... */
         * {
             margin: 0;
             padding: 0;
@@ -275,24 +277,23 @@
             </div>
 
             <form method="POST" id="jobForm">
-                <!-- CSRF token would go here in Django -->
-                <!-- {% csrf_token %} -->
+                {% csrf_token %}
 
                 <div class="floating-label">
                     <i class="fas fa-user-tie input-icon"></i>
-                    <input type="text" name="title" id="title" required>
+                    <input type="text" name="title" id="title" required />
                     <label for="title">Job Title</label>
                 </div>
 
                 <div class="floating-label">
                     <i class="fas fa-building input-icon"></i>
-                    <input type="text" name="company" id="company" required>
+                    <input type="text" name="company" id="company" required />
                     <label for="company">Company Name</label>
                 </div>
 
                 <div class="floating-label">
                     <i class="fas fa-map-marker-alt input-icon"></i>
-                    <input type="text" name="location" id="location" required>
+                    <input type="text" name="location" id="location" required />
                     <label for="location">Location</label>
                 </div>
 
@@ -315,7 +316,8 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
     <script>
-        // Add smooth interactions
+        // Disabled JS submit handler so form submits normally to backend
+        /*
         document.getElementById('jobForm').addEventListener('submit', function(e) {
             e.preventDefault();
             
@@ -338,8 +340,9 @@
                 }, 2000);
             }, 1500);
         });
+        */
 
-        // Add input animations
+        // Add input animations (optional, you can keep this)
         document.querySelectorAll('input, textarea').forEach(input => {
             input.addEventListener('focus', function() {
                 this.parentElement.style.transform = 'scale(1.02)';

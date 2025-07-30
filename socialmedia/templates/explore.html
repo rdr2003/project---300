@@ -1,5 +1,3 @@
-
-{% include "header.html" %}
 {% load static %}
 
 <!DOCTYPE html>
@@ -8,72 +6,308 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
     <script src="https://kit.fontawesome.com/cb792c0850.js" crossorigin="anonymous"></script>
+
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 
     <title>Explore</title>
+
     <link rel="stylesheet" href="{% static 'css/app.css' %}">
+
     <style>
-        /* Custom styles for the sidebar */
+        /* Enhanced CSS variables for premium look */
+        :root {
+            --primary-accent-blue: #007bff;
+            --light-accent-blue: #5cb3ff;
+            
+            --gradient-start: #667eea;
+            --gradient-middle: #764ba2;
+            --gradient-end: #f093fb;
+            
+            --sidebar-background-purple: rgba(58, 55, 80, 0.95);
+            
+            --text-light: #ffffff;
+            --text-medium: #e2e8f0;
+            
+            --shadow-color: rgba(0, 0, 0, 0.25);
+            --border-color: #4d4963;
+            --glass-bg: rgba(255, 255, 255, 0.1);
+            --glass-border: rgba(255, 255, 255, 0.2);
+        }
+
+        /* Global Reset and Font */
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
         }
 
+        /* Enhanced Body Background */
+        body {
+            background: linear-gradient(135deg, var(--gradient-start) 0%, var(--gradient-middle) 50%, var(--gradient-end) 100%);
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            color: var(--text-light);
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Animated background particles */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(120, 119, 198, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(255, 147, 251, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 40% 80%, rgba(118, 75, 162, 0.3) 0%, transparent 50%);
+            z-index: -1;
+            animation: float 20s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            33% { transform: translateY(-20px) rotate(120deg); }
+            66% { transform: translateY(10px) rotate(240deg); }
+        }
+
+        /* General Link Styling */
+        a {
+            color: var(--light-accent-blue);
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        a:hover {
+            text-decoration: none;
+            color: var(--primary-accent-blue);
+            text-shadow: 0 0 10px rgba(92, 179, 255, 0.5);
+        }
+
+        /* Enhanced Sidebar with glassmorphism */
         .sidebar {
-            background-color: #f8f9fa;
+            background: var(--sidebar-background-purple);
+            backdrop-filter: blur(20px);
+            border-right: 1px solid var(--glass-border);
             height: 100vh;
-            color: black;
+            color: var(--text-light);
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 16.666667%;
+            padding-top: 30px;
+            box-shadow: 4px 0 20px var(--shadow-color);
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* --- PROFILE PICTURE AND USERNAME ADJUSTMENTS START HERE --- */
+        .sidebar .text-center {
+            width: calc(100% - 30px); /* Adjusted width to account for margins */
+            padding: 25px 0; /* Increased vertical padding for better spacing */
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            margin: 0 15px 20px 15px; /* Added horizontal margins to fit within sidebar */
+            border: 1px solid var(--glass-border);
+            display: flex; /* Use flexbox for internal alignment */
+            flex-direction: column;
+            align-items: center; /* Center items horizontally */
+            justify-content: center; /* Center items vertically */
         }
 
         .profile-pic {
-            width: 60px;
-            height: 60px;
+            width: 100px; /* Slightly increased size for prominence */
+            height: 100px;
             border-radius: 50%;
             object-fit: cover;
+            border: 4px solid var(--primary-accent-blue);
+            padding: 4px; /* Slightly reduced padding */
+            box-shadow: 
+                0 0 0 3px rgba(91, 87, 122, 0.5),
+                0 8px 25px rgba(0, 123, 255, 0.3);
+            transition: all 0.3s ease;
+            margin-bottom: 10px; /* Space below the profile picture */
         }
 
-        a {
-            color: black;
+        .profile-pic:hover {
+            transform: scale(1.08); /* More pronounced scale effect */
+            box-shadow: 
+                0 0 0 3px rgba(91, 87, 122, 0.8),
+                0 12px 35px rgba(0, 123, 255, 0.5);
         }
 
+        .sidebar h4 {
+            margin-top: 0; /* Removed default margin-top as flexbox handles spacing */
+            color: var(--light-accent-blue);
+            font-weight: 600;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+            font-size: 1.25rem; /* Slightly larger username font */
+        }
+        /* --- PROFILE PICTURE AND USERNAME ADJUSTMENTS END HERE --- */
+
+
+        .sidebar ul.nav {
+            width: 100%;
+            padding-left: 0;
+        }
+
+        /* Enhanced Navigation Links */
+        .sidebar .nav-item .nav-link {
+            padding: 16px 1.5rem;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border-radius: 0 30px 30px 0;
+            margin-right: 15px;
+            display: flex;
+            align-items: center;
+            color: var(--text-medium);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .sidebar .nav-item .nav-link::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transition: left 0.5s;
+        }
+
+        .sidebar .nav-item .nav-link:hover::before {
+            left: 100%;
+        }
+
+        .sidebar .nav-item .nav-link i {
+            margin-right: 15px;
+            min-width: 25px;
+            text-align: center;
+            color: var(--light-accent-blue);
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+        }
+
+        .sidebar .nav-item .nav-link:hover {
+            background: linear-gradient(135deg, var(--glass-bg) 0%, rgba(255, 255, 255, 0.15) 100%);
+            color: var(--primary-accent-blue);
+            transform: translateX(10px);
+            box-shadow: 0 4px 15px rgba(0, 123, 255, 0.2);
+        }
+
+        .sidebar .nav-item .nav-link:hover i {
+            transform: scale(1.1);
+            color: var(--primary-accent-blue);
+        }
+
+        .sidebar .nav-item .nav-link.active {
+            background: linear-gradient(135deg, var(--primary-accent-blue) 0%, var(--light-accent-blue) 100%);
+            border-left: 5px solid #ffffff;
+            color: #ffffff;
+            font-weight: 600;
+            border-radius: 0 30px 30px 0;
+            box-shadow: 0 6px 20px rgba(0, 123, 255, 0.4);
+        }
+
+        .sidebar .nav-item .nav-link.active i {
+            color: #ffffff;
+        }
+
+        /* Enhanced Main Content Area */
+        main.col-md-10 {
+            margin-left: 16.666667%;
+            padding-top: 40px;
+            padding-left: 30px;
+            padding-right: 30px;
+        }
+
+        /* Enhanced Image Grid with premium styling */
         .image_s {
             position: relative;
-            width: 213px;
+            width: 100%;
+            padding-bottom: 100%;
+            height: 0;
+            overflow: hidden;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px var(--shadow-color);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            cursor: pointer;
+        }
+
+        .image_s::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, transparent 50%, rgba(255, 255, 255, 0.05) 100%);
+            border-radius: 20px;
+            z-index: 1;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .image_s:hover::before {
+            opacity: 1;
+        }
+
+        .image_s:hover {
+            transform: translateY(-15px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(92, 179, 255, 0.3);
         }
 
         .image__img {
-            display: block;
+            position: absolute;
+            top: 0;
+            left: 0;
             width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            transition: all 0.4s ease;
+            border-radius: 20px;
         }
 
+        /* Enhanced Overlay with glassmorphism */
         .image__overlay {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-
-            color: #000000;
-            font-family: 'Quicksand', sans-serif;
+            background: linear-gradient(135deg, rgba(0, 0, 0, 0.7) 0%, rgba(58, 55, 80, 0.8) 100%);
+            backdrop-filter: blur(15px);
+            color: var(--text-light);
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             opacity: 0;
-            transition: opacity 0.25s;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            padding: 25px;
+            text-align: center;
+            border-radius: 20px;
+            z-index: 2;
         }
 
-
-
-
-
         .image__overlay>* {
-            transform: translateY(20px);
-            transition: transform 0.25s;
+            transform: translateY(30px);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .image__overlay:hover {
@@ -84,103 +318,195 @@
             transform: translateY(0);
         }
 
-        .image_s:hover .image__img  {
-            opacity: 0.1;
-        
+        .image_s:hover .image__img {
+            opacity: 0.3;
+            transform: scale(1.1);
+            filter: blur(2px);
         }
 
         .image__title {
             font-size: 2em;
-            font-weight: bold;
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: var(--light-accent-blue);
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+        }
+
+        .image__title a {
+            color: var(--light-accent-blue);
+            text-decoration: none;
+            position: relative;
+        }
+
+        .image__title a::after {
+            content: '';
+            position: absolute;
+            bottom: -3px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--primary-accent-blue), var(--light-accent-blue));
+            transition: width 0.3s ease;
+        }
+
+        .image__title a:hover::after {
+            width: 100%;
         }
 
         .image__description {
-            font-size: 1.25em;
-            margin-top: 0.25em;
+            font-size: 1.1em;
+            color: var(--text-medium);
+            max-height: 120px;
+            overflow-y: auto;
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+            line-height: 1.6;
+            padding: 0 10px;
+            font-weight: 400;
+        }
+
+        .image__description::-webkit-scrollbar {
+            display: none;
+        }
+
+        /* Container enhancements */
+        .container {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border-radius: 25px;
+            border: 1px solid var(--glass-border);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Enhanced grid spacing */
+        .g-4 {
+            --bs-gutter-x: 2rem;
+            --bs-gutter-y: 2rem;
+        }
+
+        /* Responsive Adjustments */
+        @media (max-width: 767.98px) {
+            .sidebar {
+                display: none !important;
+            }
+
+            main.col-md-10 {
+                margin-left: 0 !important;
+                width: 100% !important;
+                padding: 20px;
+            }
+
+            .row-cols-sm-2 {
+                --bs-gutter-x: 1.5rem;
+                --bs-gutter-y: 1.5rem;
+            }
+
+            .row-cols-1 {
+                --bs-gutter-x: 1.5rem;
+                --bs-gutter-y: 1.5rem;
+            }
+
+            .image__title {
+                font-size: 1.5em;
+            }
+
+            .image__description {
+                font-size: 1em;
+            }
+        }
+
+        /* Loading animations */
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .loading-shimmer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            animation: shimmer 2s infinite;
         }
     </style>
 </head>
 
 <body>
 
-    {% load static %}
-
     <div class="container-fluid">
         <div class="row">
-            <nav class="col-md-2 d-none d-md-block sidebar" style="position: fixed;">
+            <nav class="col-md-2 d-none d-md-block sidebar">
                 <div class="text-center mt-3">
                     <img src="{{profile.profileimg.url}}" alt="Profile Picture" class="profile-pic">
-                    <h4 class="mt-2"><a href="/profile/{{user}}" style="text-decoration:none;">@{{user}}</a></h4>
+                    <h4 class="mt-2"><a href="/profile/{{user}}">@{{user}}</a></h4>
                 </div>
                 <ul class="nav flex-column mt-4">
                     <li class="nav-item">
                         <a class="nav-link active" href="/">
-                            <i class="fa-solid fa-house mr-1"></i> Home
+                            <i class="fa-solid fa-house"></i> Home
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="/explore">
-                            <i class="fa-solid fa-compass mr-1"></i> Explore
+                            <i class="fa-solid fa-compass"></i> Explore
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#exampleModal3">
-                            <i class="fa-solid fa-magnifying-glass mr-1"></i> Search
+                            <i class="fa-solid fa-magnifying-glass"></i> Search
                         </a>
                     </li>
-                    
                     <li class="nav-item">
                         <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#exampleModal"
                             data-bs-whatever="@getbootstrap">
-                            <i class="fa-solid fa-circle-plus mr-1"></i> Create Post
+                            <i class="fa-solid fa-circle-plus"></i> Create Post
                         </a>
-
-
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="/profile/{{profile.user}}">
-                            <i class="fa-solid fa-user mr-1"></i> Profile
+                            <i class="fa-solid fa-user"></i> Profile
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="/logoutt">
-                            <i class="fa-solid fa-right-from-bracket mr-1"></i> Logout
+                            <i class="fa-solid fa-right-from-bracket"></i> Logout
                         </a>
                     </li>
                 </ul>
             </nav>
 
-            <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-md-4">
-
+            <main role="main" class="col-md-10 ml-md-auto col-lg-10 px-md-4">
                 {% include "modal.html" %}
                 {% include "search.html" %}
 
-
-                <div class="container text-center" style="padding: 10px; margin-top:20px;">
-                    <div class="row row-cols-3">
+                <div class="container" style="padding: 10px; margin-top:20px;">
+                    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
                         {% for pos in post %}
-                        <div class="col m-2 image_s" style="margin-bottom:10px;">
-                            <img class="image__img" src="{{pos.image.url}}" alt="Post Image"
-                                style="max-width: 213px; max-height:213px">
-                            <div class="image__overlay image__overlay--primary">
-                                <div class="image__title"><a href="/profile/{{pos.user}}">@{{pos.user}}</a></div>
-                                <p class="image__description">
-                                    {{pos.caption}}
-                                </p>
+                        <div class="col"> <div class="image_s">
+                                <img class="image__img" src="{{pos.image.url}}" alt="Post Image">
+                                <div class="image__overlay image__overlay--primary">
+                                    <div class="image__title"><a href="/profile/{{pos.user}}">@{{pos.user}}</a></div>
+                                    <p class="image__description">
+                                        {{pos.caption}}
+                                    </p>
+                                </div>
                             </div>
                         </div>
                         {% endfor %}
-
                     </div>
                 </div>
             </main>
         </div>
     </div>
 
-    <script src="{% static 'js/app.js'%}"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
         crossorigin="anonymous"></script>
+
+    <script src="{% static 'js/app.js'%}"></script>
 </body>
 
 </html>

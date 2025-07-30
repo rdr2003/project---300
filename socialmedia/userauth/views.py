@@ -233,7 +233,7 @@ def follow(request):
         return redirect('/profile/' + user)
     else:
         return redirect('/')
-
+    
 @login_required(login_url='/loginn')
 def post_job(request):
     if request.method == 'POST':
@@ -242,16 +242,22 @@ def post_job(request):
         company = request.POST.get('company')
         location = request.POST.get('location')
 
-        JobCircular.objects.create(
+        print(f"Received: {title}, {company}, {location}")  # Debug print
+
+        job = JobCircular.objects.create(
             user=request.user,
             title=title,
             description=description,
             company=company,
             location=location
         )
+
+        print(f"Created job circular with ID: {job.id}")  # Debug print
+
         return redirect('/jobs')
 
     return render(request, 'post_job.html')
+
 
 @login_required(login_url='/loginn')
 def view_jobs(request):
